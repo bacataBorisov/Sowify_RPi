@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 
-# *** READ ME ***
-# for the moment I don't need feedback to the app, so I will not implement it
-
 import subprocess
 import os
 import re
