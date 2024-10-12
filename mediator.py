@@ -35,11 +35,13 @@ def on_message(client, userdata, msg):
     msg_decoded = msg.payload.decode()
     print(msg_decoded)
     if msg_decoded == "reboot":
+      
         time.sleep(2)
-        #setting uPort 1150 settings
         cmd = 'sudo reboot now'
         y = subprocess.run(cmd, shell = True)
+      
     elif msg_decoded == "shutdown":
+      
         time.sleep(2)
         cmd = 'sudo shutdown now'
         y = subprocess.run(cmd, shell = True)
