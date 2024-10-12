@@ -8,11 +8,10 @@ import logging
 import serial
 import paho.mqtt.client as mqtt
 
-#set logging settings
+#logging settings
 log_timestamp = datetime.today().isoformat()
 #comment this section and all the rest containing "loging. " 
-#if you don't want to use logging feature. However if you want to use them,
-#create the appropriate folders in your project
+#if you don't want to use logging feature. However if you want to use them create the relevant folders in your project
 
 logging.basicConfig(filename=f"/home/pi/sowify/logs/operator/{log_timestamp}.log",
 encoding='utf-8',
@@ -20,10 +19,10 @@ format='%(asctime)s %(message)s',
 datefmt='%d/%m/%Y %I:%M:%S %p', 
 level=logging.DEBUG)
 
-# create an instance of the serial port that we will open later
+# create an instance of the serial port that will be opened later
 ser = serial.Serial()
 
-# set connecting client ID
+# connecting client ID variables
 broker_adress = "localhost"
 topic_ios = "getData"
 topis_ios_feedback = "feedback"
@@ -67,7 +66,6 @@ def on_connect(client, userdata, flags, rc):
         print("Bad connection Returned code= ",rc)
         logging.warning(f"Bad connection with rc = : ", rc)
 
-#define the on_disconnect callback - this has to be logged with timestamp - heck how??
 def on_disconnect(client, userdata, rc):
 
     print("disconnecting reason  "  +str(rc))
@@ -80,7 +78,7 @@ def on_message(client, userdata, msg):
 
     msg_decoded = msg.payload.decode()
 
-    #decode the command and send the configuration vie shell
+    #decode the command and send the configuration via shell
 
     if msg.topic == ser_conf_topic:
 
@@ -91,7 +89,7 @@ def on_message(client, userdata, msg):
         baudrate = x[1]
         parity = x[2]
 
-        #this is a little bit over-engineered but I just wanted to make sure that I pass the proper stopbit constant
+        #set the correct stopbit number        
         if x[3] == '1':
             stopbits = serial.STOPBITS_ONE
             stopbits_number = 1
@@ -109,7 +107,7 @@ def on_message(client, userdata, msg):
         
         #close port before applying settings
         ser.close()
-        #this is just an extra check, I don't know if I am going to need it
+
         if ser.is_open == False:
 
             #setting uPort 1150 settings
@@ -128,8 +126,8 @@ def on_message(client, userdata, msg):
             #             1       RS-485 2W
             #             2       RS-422
             #             3       RS-485 4W
+          
             #return feedback to the ios app
-
             if interface == '1':
                 interface_dcd = 'RS-485 2W'
             elif interface == '2':
@@ -148,7 +146,7 @@ def on_message(client, userdata, msg):
             try:
                 ser.open()
             except serial.SerialException as sererr:
-                #return error code and show in the status bar together with play button disabled - HERE!!!
+                #return error code and show in the status bar together with play button disabled
                 logging.warning(f"SerialException from on_message(): {sererr}")
                 print(f"SerialException from on_message(): {sererr}")
                 client.publish(topic_warning, "Serial Converter Unplugged")
@@ -166,7 +164,6 @@ def on_message(client, userdata, msg):
             client.loop_stop()
             client.disconnect()
     else:
-        # to be done in better way
         print("Unknown message!")
 
 def read_serial():
@@ -180,8 +177,8 @@ def read_serial():
             data = ser.readline().decode('utf-8')    
             client.publish(topic_ios, data)
 
-    #adding 1 second in the exception so it doesn't go to infite cycle - explain it better
-    #catching different exceptions that occured during tests
+    #adding 1 second in the exception so it doesn't go to infite cycle
+    #catching different exceptions that occured during tests - simulated conditions
     except TypeError as typerr:
         logging.warning(f"TypeError from read_serial: {typerr}")
         print(f"TypeError from read_serial: {typerr}")
@@ -193,18 +190,17 @@ def read_serial():
         #close the port so /dev/ttyUSB0 is not changed
         if ser.is_open == True:
             ser.close()
-        #client.publish(topic_warning, "Serial Converter Unplugged")
+        client.publish(topic_warning, "Serial Converter Unplugged")
         time.sleep(1)
     except UnicodeDecodeError as unierr:
         logging.info(f"UnicodeDecodeError from read_serial: {unierr}")
         print(f"UnicodeDecodeError from read_serial: {unierr}")  
-        #client.publish(topic_warning, "Check polarity & IOIOI Settings")
+        client.publish(topic_warning, "Check polarity & IOIOI Settings")
     except AttributeError as atterr:
         logging.info(f"AttributeError from read_serial: {atterr}")
         print(f"AttributeError from read_serial: {atterr}")
-        #client.publish(topic_warning, "Serial Port Not Configured Yet")
+        client.publish(topic_warning, "Serial Port Not Configured Yet")
         time.sleep(1)
-
 
 #functions to send commands to the device
 def write_serial(message):
@@ -217,23 +213,6 @@ def write_serial(message):
 client.on_connect = on_connect
 client.on_message = on_message
 client.on_disconnect = on_disconnect
-
-# #open port - hold it for now, I am not sure if I am going to need it
-# try:
-#     #initial port settings
-#     ser.port = '/dev/ttyUSB0'
-#     initial_port_settings = {'baudrate': 9600, 'bytesize': 8, 'parity': 'N', 'stopbits': 1}
-#     ser.apply_settings(initial_port_settings)
-#     ser.open()
-#     print(f"initial settings {ser.get_settings()}")
-# except serial.SerialException as sererr:
-#     #return error code and show in the status bar together with play button disabled - HERE!!!
-#     logging.warning(f"SerialException from on_message(): {sererr}")
-#     print(f"SerialException from on_message(): {sererr}")
-#     client.publish(topic_warning, "Serial Converter Unplugged")
-#     time.sleep(1)
-
-
 
 #infinte loop
 while True:
