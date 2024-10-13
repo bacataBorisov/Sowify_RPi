@@ -70,7 +70,7 @@ logging.basicConfig(filename=f"**your-log-dir-name-goes-here**/{log_timestamp}.l
 
 ## **License**
 
-Project Title is released under the MIT License. See the **[LICENSE](https://github.com/bacataBorisov/Sowify_RPi/blob/master/LICENSE.txt)** file for details.
+Sowify is released under the MIT License. See the **[LICENSE](https://github.com/bacataBorisov/Sowify_RPi/blob/master/LICENSE.txt)** file for details.
 
 ## **Authors and Acknowledgment**
 
@@ -87,4 +87,4 @@ Following resources have been used while developing project
 
 ## **Contact**
 
-If you have any questions or comments about Sowify, please contact **[bacata.borisov](vasil.borisovv@gmail.com)**.
+If you have any questions or comments about Sowify, please contact **[bacata.borisov](https://github.com/bacataBorisov)**.
