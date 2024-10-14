@@ -2,23 +2,27 @@
 
 ## Project description
 
-The purpose of this project is to facilitate the troubleshooting while working with serial signals - such as reading data from sensors. 
-It eliminates the need for carrying various equipment and setting up cables in spaces with difficult access. 
-The project consists of two separate parts:
-1. A Raspberry Pi (aka RPi) with a MOXA uPort1150 serial-to-USB adapter - used to send the data over the network.
-2. iOS mobile app that will receive the data and visualise it.
- 
-_(RPi Model 3B+ was used in this project but any other RPi with USB Type A port should do the job)_
+This project aims to facilitate troubleshooting by eliminating the need for additional equipment and complex setups. It consists of two main components:
 
-The RPi will be battery powered, serial signal will be read and sent over the wi-fi to an iOS device that has the Sowify app installed on it (iPhone, iPad).
-All devices must be connected to the same network(wi-fi or ad-hoc)
+1. Raspberry Pi (RPi):
 
-* Read / Write commands from / to the equipment are supported.
-* The preferred interface can be selected from the Sowify mobile app and that will change the configuration of the uPort
-* RS232/422/485 serial standarts can be selected
-* MODBUS communication is not supported yet.
+- Equipped with a MOXA uPort1150 for serial communication.
+- Can use any RPi model having USB Type A (Model 3B+ used in this project).
+- Battery-powered with serial signal conversion.
 
-The following installation instructions apply to the setup of the RPi. More information about the mobile app an its usage can be found in a [separate section](https://github.com/bacataBorisov/Sowify-iOS-App/blob/main/README.md)
+2. iOS Mobile App:
+
+- Receives serial data sent by the RPi over Wi-Fi using an MQTT server.
+- Devices must be on the same network (Wi-Fi or Ethernet).
+
+### Features:
+
+- Read/Write commands to/from equipment.
+- Select preferred interface via Sowify app.
+- Support for RS232/422/485 serial standards.
+- MODBUS communication support (not yet implemented).
+
+The following installation instructions apply to the setup of the RPi. More information about the mobile app an its usage can be found in a [separate section](https://github.com/bacataBorisov/Sowify_RPi/blob/master/README.md)
 
 ## Installation
 
